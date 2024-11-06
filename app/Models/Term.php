@@ -5,12 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Campaign extends Model
+class Term extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
-
-    //add timestamp false
-    public $timestamps = false;
 }

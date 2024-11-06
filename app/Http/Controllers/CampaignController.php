@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campaign;
+use App\Models\CampaignStat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,7 +30,14 @@ class CampaignController extends Controller
      */
     public function show(Campaign $campaign)
     {
-        // @TODO implement
+        $stats = CampaignStat::where('campaign_id', $campaign->id)
+                    ->selectRaw('DATE(monetization_timestamp) as date, hours, SUM(revenue) as total_revenue')
+                    ->groupBy('date', 'hours')
+                    ->orderBy('date')
+                    ->orderBy('hours')
+                    ->paginate(24);
+
+        return view('campaign.campaign', compact('campaign', 'stats'));
     }
 
     /**
@@ -37,6 +45,14 @@ class CampaignController extends Controller
      */
     public function publishers(Campaign $campaign)
     {
-        // @TODO implement
+        $termStats = CampaignStat::where('campaign_id', $campaign->id)
+            ->join('terms', 'terms.id', '=', 'campaign_stats.term_id')
+            ->select('terms.utm_term', 'terms.id')
+            ->selectRaw('SUM(campaign_stats.revenue) as total_revenue')
+            ->groupBy('terms.id')
+            ->orderBy('total_revenue', 'desc')
+            ->paginate(20);
+
+        return view('campaign.publisher', compact('campaign', 'termStats'));
     }
 }

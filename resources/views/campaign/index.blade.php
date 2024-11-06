@@ -15,8 +15,10 @@
                         <x-table-td>{{ $campaign->utm_campaign }}</x-table-td>
                         <x-table-td>{{ $campaign->total_revenue }}</x-table-td>
                         <x-table-td>
-                            <a href="{{ route('campaign', $campaign) }}" class="text-blue-500">Details</a>
-                            <a href="{{ route('publishers', $campaign) }}" class="text-blue-500">Publishers</a>
+                            <div>
+                                <x-button href="{{ route('campaign', $campaign) }}" class=" mr-2">Details</x-button>
+                                <x-button href="{{ route('publishers', $campaign) }}" >Publishers</x-button>
+                            </div>
                         </x-table-td>
                     </tr>
                 @endforeach
